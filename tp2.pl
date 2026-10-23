@@ -44,7 +44,6 @@ coordenadaEnRango(M, (X,Y)) :- tamaño(M,F,C), between(1,F,X), between(1,C,Y).
 
 
 
-
 % ----------------
 % Observadores de tablero.
 % ----------------
