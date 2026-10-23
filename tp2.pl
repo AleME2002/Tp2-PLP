@@ -5,11 +5,12 @@
 % ----------------
 
 % esMatriz(+ListaDeListas)
+%esMatriz(_) :- completar("Ejercicio 1").
 esMatriz([]).
-esMatriz([X|XS]) :- maplist(is_list, [X|XS]), length(X, L), todasMismaLonguitud(L, XS).
+esMatriz([X|XS]) :- is_list(X), length(X, L), todasMismaLonguitud(L, XS).
 
 todasMismaLonguitud(_,[]).
-todasMismaLonguitud(L, [X|XS]) :- length(X, L), todasMismaLonguitud(L,XS). 
+todasMismaLonguitud(L, [X|XS]) :- is_list(X), length(X, L), todasMismaLonguitud(L,XS). 
 
 
 % ----------------
