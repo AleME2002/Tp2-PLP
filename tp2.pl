@@ -5,12 +5,14 @@
 % ----------------
 
 % esMatriz(+ListaDeListas)
-%esMatriz(_) :- completar("Ejercicio 1").
+
 esMatriz([]).
 esMatriz([X|XS]) :- is_list(X), length(X, L), todasMismaLonguitud(L, XS).
 
 todasMismaLonguitud(_,[]).
 todasMismaLonguitud(L, [X|XS]) :- is_list(X), length(X, L), todasMismaLonguitud(L,XS). 
+
+
 
 
 % ----------------
@@ -19,9 +21,8 @@ todasMismaLonguitud(L, [X|XS]) :- is_list(X), length(X, L), todasMismaLonguitud(
 
 % tamaño(+Matriz, -Filas, -Columnas)
 % Precondición: esMatriz(Matriz)
-% tamaño(_, _, _) :- completar("Ejercicio 2").
 
-tamaño([XS | XSS], F, C) :- esMatriz([XS | XSS]), length(XS,F), length([XS|XSS],C).   
+tamaño([X | XS], F, C) :- esMatriz([X | XS]), length(X,F), length([X|XS],C).   
 
 
 
@@ -32,8 +33,10 @@ tamaño([XS | XSS], F, C) :- esMatriz([XS | XSS]), length(XS,F), length([XS|XSS]
 
 % coordenadaEnRango(+Matriz, +Coordenada)
 % Precondición: esMatriz(Matriz)
-%coordenadaEnRango(_, _) :- completar("Ejercicio 3").
+
 coordenadaEnRango(M, (X,Y)) :- tamaño(M,F,C), between(1,F,X), between(1,C,Y).   
+
+
 
 
 % Justificación de reversibilidad. 
@@ -83,22 +86,11 @@ color(T, Color, Coordenada) :-
 
 % tableroConPosiciónLiberada(+Tablero, +Coordenada, -TableroLiberado)
 % Precondición: esMatriz(Tablero), coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
-% tableroConPosiciónLiberada(_, _, _) :- completar("Ejercicio 4.a").
 
 tableroConPosiciónLiberada(T, (X,Y), TL) :- 
   coordenadasNoXY(T,(X,Y),TL), valorEnCoordenada(TL, (X,Y), libre).
 
 coordenadasNoXY(T,(X,Y),TL) :- forall(coordenada(T,C), (C =\= (X,Y), valorEnCoordenada(T,C,V), valorEnCoordenada(TL,C,V))).
-
-
-
-
-
-
-
-
-
-
 
 
 
