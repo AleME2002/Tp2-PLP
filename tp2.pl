@@ -119,17 +119,6 @@ tableroConPosicionesLiberadas(T, [C|XS], TL) :- tableroConPosicionesLiberadas(T,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 % ----------------
 % Operaciones sobre coordenadas.
 % ----------------
