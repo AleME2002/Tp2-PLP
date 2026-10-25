@@ -86,12 +86,10 @@ color(T, Color, Coordenada) :-
 % tableroConPosiciónLiberada(+Tablero, +Coordenada, -TableroLiberado)
 % Precondición: esMatriz(Tablero), coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
 
+% ----------------------------
 % coordenadasNoXY(T,(X,Y),TL) :- forall(coordenada(T,C), (C \= (X,Y), valorEnCoordenada(T,C,V), valorEnCoordenada(TL,C,V))).    VERSION DEL VIERNES!
-% tableroConPosiciónLiberada(T, (X,Y), TL) :- coordenadasNoXY(T,(X,Y),TL), valorEnCoordenada(TL, (X,Y), libre).    VERSION DEL VIERNES!
-
-
-
-% EN PROGRESO, NO TOCAR! ALEJO 
+% tableroConPosiciónLiberada(T, (X,Y), TL) :- coordenadasNoXY(T,(X,Y),TL), valorEnCoordenada(TL, (X,Y), libre).                 VERSION DEL VIERNES!
+% ----------------------------
 
 crearTablero(0, _, []).
 crearTablero(F, C, [L|TN]) :- F \= 0, Fm1 is F - 1, length(L, C), crearTablero(Fm1, C, TN).
@@ -108,7 +106,6 @@ tableroConPosiciónLiberada(T, C, TL) :- tamaño(T, Fil, Col), crearTablero(Fil,
 
 
 
-
 % ----------------
 % Ejercicio 4.b)
 % ----------------
@@ -116,7 +113,9 @@ tableroConPosiciónLiberada(T, C, TL) :- tamaño(T, Fil, Col), crearTablero(Fil,
 % tableroConPosicionesLiberadas(+Tablero, +Posiciones, -TableroLiberado)
 % Precondición: esMatriz(Tablero).
 % Precondición: para cada Coordenada en Posiciones: coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
-tableroConPosicionesLiberadas(_, _, _) :- completar("Ejercicio 4.b").
+
+tableroConPosicionesLiberadas(T, [], T).
+tableroConPosicionesLiberadas(T, [C|XS], TL) :- tableroConPosicionesLiberadas(T, XS, TM), tableroConPosiciónLiberada(TM, C, TL).
 
 
 
