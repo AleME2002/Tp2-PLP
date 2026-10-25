@@ -86,19 +86,25 @@ color(T, Color, Coordenada) :-
 % tableroConPosiciónLiberada(+Tablero, +Coordenada, -TableroLiberado)
 % Precondición: esMatriz(Tablero), coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
 
-% coordenadasNoXY(T,(X,Y),TL) :- forall(coordenada(T,C), (C =\= (X,Y), valorEnCoordenada(T,C,V) =:= valorEnCoordenada(TL,C,V))).    VERSION DEL VIERNES!
+% coordenadasNoXY(T,(X,Y),TL) :- forall(coordenada(T,C), (C \= (X,Y), valorEnCoordenada(T,C,V), valorEnCoordenada(TL,C,V))).    VERSION DEL VIERNES!
 % tableroConPosiciónLiberada(T, (X,Y), TL) :- coordenadasNoXY(T,(X,Y),TL), valorEnCoordenada(TL, (X,Y), libre).    VERSION DEL VIERNES!
 
 
 
 % EN PROGRESO, NO TOCAR! ALEJO 
 
-crearTablero(T, F, C, TN).
-crearTablero(T, F, C, TN) :- not(length(T, F)).
+crearTablero(0, _, []).
+crearTablero(F, C, [L|TN]) :- F \= 0, Fm1 is F - 1, length(L, C), crearTablero(Fm1, C, TN).
 
-copiarTableroSalvo(T,(X,Y),TL) :- tamaño(T, F, C), between(1, F, Fila), between(1, C, Columna), Fila \= X, Columna \= Y.
+copiarFilaSalvo([], _, _, []).
+copiarFilaSalvo([_|XS], C, C, [_|PS]) :- Cm1 is C + 1, copiarFilaSalvo(XS, Cm1, C, PS).
+copiarFilaSalvo([X|XS], C, Y, [X|PS]) :- C \= Y, Cm1 is C + 1, copiarFilaSalvo(XS, Cm1, Y, PS).
 
-tableroConPosiciónLiberada(T, C, TL) :- copiarTableroSalvo(T,C,TL), valorEnCoordenada(TL, C, libre).
+copiarTableroSalvo([], _, _, []).
+copiarTableroSalvo([T1|T], (F,C), (F,Y), [T2|TL]) :- Fm1 is F + 1, copiarFilaSalvo(T1, C, Y, T2), copiarTableroSalvo(T, (Fm1,C), (F,Y), TL).
+copiarTableroSalvo([T1|T], (F,C), (X,Y), [T1|TL]) :- F \= X, Fm1 is F + 1, copiarTableroSalvo(T, (Fm1,C), (X,Y), TL).
+
+tableroConPosiciónLiberada(T, C, TL) :- tamaño(T, Fil, Col), crearTablero(Fil, Col, TL), copiarTableroSalvo(T, (1,1), C, TL) ,valorEnCoordenada(TL, C, libre).
 
 
 
