@@ -85,12 +85,20 @@ color(T, Color, Coordenada) :-
 
 % tableroConPosiciónLiberada(+Tablero, +Coordenada, -TableroLiberado)
 % Precondición: esMatriz(Tablero), coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
-coordenadasNoXY(T,(X,Y),TL) :- forall(coordenada(T,C), (C =\= (X,Y), valorEnCoordenada(T,C,V) =:= valorEnCoordenada(TL,C,V))).
 
-tableroConPosiciónLiberada(T, (X,Y), TL) :- coordenadasNoXY(T,(X,Y),TL), valorEnCoordenada(TL, (X,Y), libre).
+% coordenadasNoXY(T,(X,Y),TL) :- forall(coordenada(T,C), (C =\= (X,Y), valorEnCoordenada(T,C,V) =:= valorEnCoordenada(TL,C,V))).    VERSION DEL VIERNES!
+% tableroConPosiciónLiberada(T, (X,Y), TL) :- coordenadasNoXY(T,(X,Y),TL), valorEnCoordenada(TL, (X,Y), libre).    VERSION DEL VIERNES!
 
 
-tableroConPosiciónLiberadaALE(T, (X,Y), TL) :- TM is T, valorEnCoordenada(TM, (X,Y), libre), coordenadasNoXY(T,(X,Y),TM), TL is TM.
+
+% EN PROGRESO, NO TOCAR! ALEJO 
+
+crearTablero(T, F, C, TN).
+crearTablero(T, F, C, TN) :- not(length(T, F)).
+
+copiarTableroSalvo(T,(X,Y),TL) :- tamaño(T, F, C), between(1, F, Fila), between(1, C, Columna), Fila \= X, Columna \= Y.
+
+tableroConPosiciónLiberada(T, C, TL) :- copiarTableroSalvo(T,C,TL), valorEnCoordenada(TL, C, libre).
 
 
 
