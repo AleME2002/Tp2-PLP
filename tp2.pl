@@ -14,7 +14,6 @@ todasMismaLonguitud(L, [X|XS]) :- is_list(X), length(X, L), todasMismaLonguitud(
 
 
 
-
 % ----------------
 % Ejercicio 2
 % ----------------
@@ -22,8 +21,8 @@ todasMismaLonguitud(L, [X|XS]) :- is_list(X), length(X, L), todasMismaLonguitud(
 % tamaño(+Matriz, -Filas, -Columnas)
 % Precondición: esMatriz(Matriz)
 
-tamaño([X | XS], F, C) :- esMatriz([X | XS]), length(X,F), length([X|XS],C).   
-
+tamaño([], 0, 0).
+tamaño([X | XS], F, C) :- esMatriz([X | XS]), length(X,C), length([X|XS],F).   
 
 
 
@@ -86,11 +85,13 @@ color(T, Color, Coordenada) :-
 
 % tableroConPosiciónLiberada(+Tablero, +Coordenada, -TableroLiberado)
 % Precondición: esMatriz(Tablero), coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
+coordenadasNoXY(T,(X,Y),TL) :- forall(coordenada(T,C), (C =\= (X,Y), valorEnCoordenada(T,C,V) =:= valorEnCoordenada(TL,C,V))).
 
-tableroConPosiciónLiberada(T, (X,Y), TL) :- 
-  coordenadasNoXY(T,(X,Y),TL), valorEnCoordenada(TL, (X,Y), libre).
+tableroConPosiciónLiberada(T, (X,Y), TL) :- coordenadasNoXY(T,(X,Y),TL), valorEnCoordenada(TL, (X,Y), libre).
 
-coordenadasNoXY(T,(X,Y),TL) :- forall(coordenada(T,C), (C =\= (X,Y), valorEnCoordenada(T,C,V), valorEnCoordenada(TL,C,V))).
+
+tableroConPosiciónLiberadaALE(T, (X,Y), TL) :- TM is T, valorEnCoordenada(TM, (X,Y), libre), coordenadasNoXY(T,(X,Y),TM), TL is TM.
+
 
 
 
