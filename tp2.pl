@@ -254,7 +254,8 @@ jugadaPosible(T, (I, J)) :-
 
 % jugarPosición(+TableroInicial, +Coordenada, -TableroResultante)
 % Precondición: esMatriz(TableroInicial), coordenadaEnRango(TableroInicial, Coordenada), libre(TableroInicial, Coordenada).
-jugarPosición(_, _, _) :- completar("Ejercicio 5.a").
+
+jugarPosición(T,C,TR) :- coloresPredominantes(T,C,_,PC), tableroConPosicionesLiberadas(T,PC,TR).
 
 % ----------------
 % Ejercicio 5.b)
@@ -263,7 +264,9 @@ jugarPosición(_, _, _) :- completar("Ejercicio 5.a").
 % jugarPosiciones(+TableroInicial, +Jugadas, -TableroResultante)
 % Precondición: esMatriz(TableroInicial).
 % Precondición: para cada Coordenada en Jugadas: coordenadaEnRango(TableroInicial, Coordenada).
-jugarPosiciones(_, _, _) :- completar("Ejercicio 5.b").
+
+jugarPosiciones(T,[],T).
+jugarPosiciones(T,[X|XS],TR) :- jugarPosición(T,X,TR1), jugarPosiciones(TR1,XS,TR).
 
 % jugarNaive(+TableroInicial, -TableroFinal)
 % Precondición: esMatriz(TableroInicial).
