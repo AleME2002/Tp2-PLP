@@ -91,18 +91,18 @@ color(T, Color, Coordenada) :-
 % tableroConPosiciónLiberada(T, (X,Y), TL) :- coordenadasNoXY(T,(X,Y),TL), valorEnCoordenada(TL, (X,Y), libre).                 VERSION DEL VIERNES!
 % ----------------------------
 
-crearTablero(0, _, []).
-crearTablero(F, C, [L|TN]) :- F \= 0, Fm1 is F - 1, length(L, C), crearTablero(Fm1, C, TN).
+mismasDimensiones(0, _, []).
+mismasDimensiones(F, C, [L|TN]) :- F \= 0, Fm1 is F - 1, length(L, C), mismasDimensiones(Fm1, C, TN).
 
-copiarFilaSalvo([], _, _, []).
-copiarFilaSalvo([_|XS], C, C, [_|PS]) :- Cm1 is C + 1, copiarFilaSalvo(XS, Cm1, C, PS).
-copiarFilaSalvo([X|XS], C, Y, [X|PS]) :- C \= Y, Cm1 is C + 1, copiarFilaSalvo(XS, Cm1, Y, PS).
+mismaFilaSalvo([], _, _, []).
+mismaFilaSalvo([_|XS], C, C, [_|PS]) :- Cm1 is C + 1, mismaFilaSalvo(XS, Cm1, C, PS).
+mismaFilaSalvo([X|XS], C, Y, [X|PS]) :- C \= Y, Cm1 is C + 1, mismaFilaSalvo(XS, Cm1, Y, PS).
 
-copiarTableroSalvo([], _, _, []).
-copiarTableroSalvo([T1|T], (F,C), (F,Y), [T2|TL]) :- Fm1 is F + 1, copiarFilaSalvo(T1, C, Y, T2), copiarTableroSalvo(T, (Fm1,C), (F,Y), TL).
-copiarTableroSalvo([T1|T], (F,C), (X,Y), [T1|TL]) :- F \= X, Fm1 is F + 1, copiarTableroSalvo(T, (Fm1,C), (X,Y), TL).
+igualesSalvoEn([], _, _, []).
+igualesSalvoEn([T1|T], (F,C), (F,Y), [T2|TL]) :- Fm1 is F + 1, mismaFilaSalvo(T1, C, Y, T2), igualesSalvoEn(T, (Fm1,C), (F,Y), TL).
+igualesSalvoEn([T1|T], (F,C), (X,Y), [T1|TL]) :- F \= X, Fm1 is F + 1, igualesSalvoEn(T, (Fm1,C), (X,Y), TL).
 
-tableroConPosiciónLiberada(T, C, TL) :- tamaño(T, Fil, Col), crearTablero(Fil, Col, TL), copiarTableroSalvo(T, (1,1), C, TL) ,valorEnCoordenada(TL, C, libre).
+tableroConPosiciónLiberada(T, C, TL) :- tamaño(T, Fil, Col), mismasDimensiones(Fil, Col, TL), igualesSalvoEn(T, (1,1), C, TL) ,valorEnCoordenada(TL, C, libre).
 
 
 
