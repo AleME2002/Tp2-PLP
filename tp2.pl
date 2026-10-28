@@ -285,12 +285,17 @@ jugarNaive(T, TF) :-
   jugarNaive(TI, TF).
 
 % ----------------
-% Ejercicio 6.b)
+% Ejercicio 6
 % ----------------
 
 % jugadasNaive(+Tablero, -Jugadas)
 % Precondición: esMatriz(Tablero).
-jugadasNaive(_, _) :- completar("Ejercicio 6.b").
+jugadasNaive(T, []) :- 
+  not(jugadaPosible(T, _)).
+jugadasNaive(T, [J|JF]):-
+  jugadaPosible(T, J),
+  jugarPosición(T, J, TI),
+  jugadasNaive(TI, JF).
 
 % ----------------
 % Ejercicio 7.a)
