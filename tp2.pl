@@ -90,10 +90,11 @@ color(T, Color, Coordenada) :-
 reemplazarEn([_|XS], 1, V, [V|XS]).
 reemplazarEn([X|XS], I, V, [X|YS]) :- I > 1, Im1 is I - 1, reemplazarEn(XS, Im1, V, YS).
 
-tableroConPosiciónLiberada(T, (F,C), TL) :- nth1(F, T, Fila), reemplazarEn(Fila, C, libre, FilaL), reemplazarEn(T, F, FilaL, TL).
+tableroConPosiciónLiberada(T, (F,C), TL) :- nth1(F, T, Fila), reemplazarEn(Fila, C, libre, NuevaFila), reemplazarEn(T, F, NuevaFila, TL).
 
 % nth1 separa la fila en la que hay q cambiar el elemento,
 % Despues simplemente remplazo el elemento como hacia antes pero mas facil (soy DIOS hijas mias)
+% Despues reemplazo la nueva lista en la matriz original 
 
 
 
