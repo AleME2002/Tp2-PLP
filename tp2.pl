@@ -305,7 +305,11 @@ jugadasNaive(T, [J|JF]):-
 % Precondición: esMatriz(Tablero).
 % Precondición: para cada Coordenada en Jugadas: coordenadaEnRango(Tablero, Coordenada).
 
-victoriaConJugadas(T,J) :- jugarPosiciones(T,J,TF), forall(coordenada(TF,C), libre(TF,C)).
+todasLibres(T) :- not((coordenada(T,C), not(libre(T,C)))).
+
+victoriaConJugadas(T,J) :- jugarPosiciones(T,J,TF), todasLibres(TF).
+
+% Alt: forall(coordenada(TF,C), libre(TF,C)).
 
 % ----------------
 % Ejercicio 7.b)
@@ -323,6 +327,8 @@ juegoNaiveVictorioso(T,J) :- jugadasNaive(T,J), victoriaConJugadas(T,J).
 % mejorJuegoNaive(+Tablero, -Jugadas)
 % Precondición: esMatriz(Tablero).
 mejorJuegoNaive(_, _) :- completar("Ejercicio 7.c").
+
+
 
 % ----------------
 % Ejercicio 8 - OPCIONAL
