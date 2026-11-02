@@ -332,14 +332,58 @@ juegoNaiveVictorioso(T,J) :- jugadasNaive(T,J), victoriaConJugadas(T,J).
 mejorJuegoNaive(T,J) :- 
   juegoNaiveVictorioso(T,J), length(J,N), 
   not((juegoNaiveVictorioso(T,J2), length(J2,N2), N2<N)). 
-
+  % no existe J2 / tenga menos jugadas que N 
 
 % ----------------
 % Ejercicio 8 - OPCIONAL
 % ----------------
 
 % tableroEnElQueNaiveGanaEmpezandoPor(-Tablero, +Coordenada)
-tableroEnElQueNaiveGanaEmpezandoPor(_, _) :- completar("Ejercicio 8").
+% tableroEnElQueNaiveGanaEmpezandoPor(_, _) :- completar("Ejercicio 8").
+
+desde(X,X). 
+desde(X,Y) :- N is X+1, desde(N,Y). 
+
+pares(X,Y) :- 
+  desde(2,S), Sm1 is S-1, between(1,Sm1, X), Y is S-X. 
+
+% opcionParaUnaCelda(?X) 
+opcionParaUnaCelda(libre). 
+opcionParaUnaCelda(C) :- color(C). 
+
+rellenarFila([]). 
+rellenarFila([X|XS]) :- opcionParaUnaCelda(X), rellenarFila(XS). 
+
+rellenarTablero([]). 
+rellenarTablero([F|FS]):- rellenarFila(F), rellenarTablero(FS). 
+
+%filasDeTamañoN(+N, +ListaDeFilas).
+filasDeTamañoN(_, []). 
+filasDeTamañoN(N, [F|FS]) :- length(F,N), filasDeTamañoN(N, FS). 
+
+% tableroGenerado(-Tablero, ?Coordenada)
+tableroGenerado(T, (F,C)) :- 
+  pares(I, J), 
+  between(1,I,F), 
+  between(1,J,C), 
+  length(T,I), 
+  filasDeTamañoN(J,T), 
+  valorEnCoordenada(T,(F,C), libre), 
+  rellenarTablero(T). 
+
+tableroEnElQueNaiveGanaEmpezandoPor(T, Coordenada) :-
+  tableroGenerado(T, Coordenada), 
+  jugarPosición(T, Coordenada, T1), 
+  juegoNaiveVictorioso(T1, _). 
+
+/*
+generaremos todos los pares de naturales apra luego utilizarlos en la generacion de 
+tableros de ese tamaño de filas y columnas. para cada tamaño que elegimos, fijamos 
+Coordenada como libre y se rellena el resto con opcionParaUnaCelda/1
+*/
+
+
+
 
 % ----------------
 % Interfaz gráfica
