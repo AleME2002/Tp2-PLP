@@ -7,10 +7,11 @@
 % esMatriz(+ListaDeListas)
 
 esMatriz([]).
-esMatriz([X|XS]) :- is_list(X), length(X, L), todasMismaLonguitud(L, XS).
+esMatriz([X|XS]) :- is_list(X), length(X, L), todasMismaLongitud(L, XS).
 
-todasMismaLonguitud(_,[]).
-todasMismaLonguitud(L, [X|XS]) :- is_list(X), length(X, L), todasMismaLonguitud(L,XS). 
+%todasMismaLonguitud(+Longitud, +ListaDeListas)
+todasMismaLongitud(_,[]).
+todasMismaLongitud(L, [X|XS]) :- is_list(X), length(X, L), todasMismaLongitud(L,XS). 
 
 
 
@@ -101,7 +102,7 @@ igualesSalvoEn([T1|T], (F,C), (X,Y), [T1|TL]) :- F \= X, Fm1 is F + 1, igualesSa
 tableroConPosiciónLiberada(T, C, TL) :- tamaño(T, Fil, Col), mismasDimensiones(Fil, Col, TL), igualesSalvoEn(T, (1,1), C, TL) ,valorEnCoordenada(TL, C, libre).
 */
 
-
+% reemplazarEn(+Lista, +Indice, +Valor, -ListaResultante).
 reemplazarEn([_|XS], 1, V, [V|XS]).
 reemplazarEn([X|XS], I, V, [X|YS]) :- I > 1, Im1 is I - 1, reemplazarEn(XS, Im1, V, YS).
 
@@ -305,6 +306,7 @@ jugadasNaive(T, [J|JF]):-
 % Precondición: esMatriz(Tablero).
 % Precondición: para cada Coordenada en Jugadas: coordenadaEnRango(Tablero, Coordenada).
 
+% todasLibres(+Tablero). 
 todasLibres(T) :- not((coordenada(T,C), not(libre(T,C)))).
 
 victoriaConJugadas(T,J) :- jugarPosiciones(T,J,TF), todasLibres(TF).
@@ -326,8 +328,10 @@ juegoNaiveVictorioso(T,J) :- jugadasNaive(T,J), victoriaConJugadas(T,J).
 
 % mejorJuegoNaive(+Tablero, -Jugadas)
 % Precondición: esMatriz(Tablero).
-mejorJuegoNaive(_, _) :- completar("Ejercicio 7.c").
-
+% mejorJuegoNaive(_, _) :- completar("Ejercicio 7.c").
+mejorJuegoNaive(T,J) :- 
+  juegoNaiveVictorioso(T,J), length(J,N), 
+  not((juegoNaiveVictorioso(T,J2), length(J2,N2), N2<N)). 
 
 
 % ----------------
