@@ -9,7 +9,7 @@
 esMatriz([]).
 esMatriz([X|XS]) :- is_list(X), length(X, L), todasMismaLongitud(L, XS).
 
-%todasMismaLonguitud(+Longitud, +ListaDeListas)
+% todasMismaLonguitud(+Longitud, +ListaDeListas)
 todasMismaLongitud(_,[]).
 todasMismaLongitud(L, [X|XS]) :- is_list(X), length(X, L), todasMismaLongitud(L,XS). 
 
@@ -123,8 +123,7 @@ tableroConPosiciónLiberada(T, (F,C), TL) :- nth1(F, T, Fila), reemplazarEn(Fila
 % Precondición: para cada Coordenada en Posiciones: coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
 
 tableroConPosicionesLiberadas(T, [], T).
-tableroConPosicionesLiberadas(T, [C|XS], TL) :- tableroConPosicionesLiberadas(T, XS, TM), tableroConPosiciónLiberada(TM, C, TL).
-
+tableroConPosicionesLiberadas(T, [C|XS], TL) :-tableroConPosiciónLiberada(T, C, TI),  tableroConPosicionesLiberadas(TI, XS, TL).
 
 
 % ----------------
@@ -310,8 +309,6 @@ jugadasNaive(T, [J|JF]):-
 todasLibres(T) :- not((coordenada(T,C), not(libre(T,C)))).
 
 victoriaConJugadas(T,J) :- jugarPosiciones(T,J,TF), todasLibres(TF).
-
-% Alt: forall(coordenada(TF,C), libre(TF,C)).
 
 % ----------------
 % Ejercicio 7.b)
