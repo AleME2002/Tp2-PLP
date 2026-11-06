@@ -42,7 +42,7 @@ coordenadaEnRango(M, (X,Y)) :- tamaño(M,F,C), between(1,F,X), between(1,C,Y).
 % Justificación de reversibilidad. 
 % TODO: 
 % El argumento Coordenada es reversible ya que sus argumentos internos (X e Y) pueden ser instanciados 
-% por el predicado between. 
+% por el predicado between, por lo cual no se espera que la coordenada venga instanciada.
 
 
 
@@ -87,30 +87,18 @@ color(T, Color, Coordenada) :-
 % tableroConPosiciónLiberada(+Tablero, +Coordenada, -TableroLiberado)
 % Precondición: esMatriz(Tablero), coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
 
-/*
-mismasDimensiones(0, _, []).
-mismasDimensiones(F, C, [L|TN]) :- F \= 0, Fm1 is F - 1, length(L, C), mismasDimensiones(Fm1, C, TN).
-
-mismaFilaSalvo([], _, _, []).
-mismaFilaSalvo([_|XS], C, C, [_|PS]) :- Cm1 is C + 1, mismaFilaSalvo(XS, Cm1, C, PS).
-mismaFilaSalvo([X|XS], C, Y, [X|PS]) :- C \= Y, Cm1 is C + 1, mismaFilaSalvo(XS, Cm1, Y, PS).
-
-igualesSalvoEn([], _, _, []).
-igualesSalvoEn([T1|T], (F,C), (F,Y), [T2|TL]) :- Fm1 is F + 1, mismaFilaSalvo(T1, C, Y, T2), igualesSalvoEn(T, (Fm1,C), (F,Y), TL).
-igualesSalvoEn([T1|T], (F,C), (X,Y), [T1|TL]) :- F \= X, Fm1 is F + 1, igualesSalvoEn(T, (Fm1,C), (X,Y), TL).
-
-tableroConPosiciónLiberada(T, C, TL) :- tamaño(T, Fil, Col), mismasDimensiones(Fil, Col, TL), igualesSalvoEn(T, (1,1), C, TL) ,valorEnCoordenada(TL, C, libre).
-*/
-
 % reemplazarEn(+Lista, +Indice, +Valor, -ListaResultante).
 reemplazarEn([_|XS], 1, V, [V|XS]).
 reemplazarEn([X|XS], I, V, [X|YS]) :- I > 1, Im1 is I - 1, reemplazarEn(XS, Im1, V, YS).
 
-tableroConPosiciónLiberada(T, (F,C), TL) :- nth1(F, T, Fila), reemplazarEn(Fila, C, libre, NuevaFila), reemplazarEn(T, F, NuevaFila, TL).
+tableroConPosiciónLiberada(T, (F,C), TL) :- 
+  nth1(F, T, Fila), 
+  reemplazarEn(Fila, C, libre, NuevaFila), 
+  reemplazarEn(T, F, NuevaFila, TL).
 
-% nth1 separa la fila en la que hay q cambiar el elemento,
-% Despues simplemente remplazo el elemento como hacia antes pero mas facil (soy DIOS hijas mias)
-% Despues reemplazo la nueva lista en la matriz original 
+% nth1 obtiene la fila en la que hay q cambiar el elemento.
+% Después simplemente remplazo en ella en la coordenada correspondiente por una celda libre.
+% Despues reemplazo la nueva lista en la matriz original. 
 
 
 
@@ -123,7 +111,9 @@ tableroConPosiciónLiberada(T, (F,C), TL) :- nth1(F, T, Fila), reemplazarEn(Fila
 % Precondición: para cada Coordenada en Posiciones: coordenadaEnRango(Tablero, Coordenada), not(libre(Tablero, Coordenada)).
 
 tableroConPosicionesLiberadas(T, [], T).
-tableroConPosicionesLiberadas(T, [C|XS], TL) :-tableroConPosiciónLiberada(T, C, TI),  tableroConPosicionesLiberadas(TI, XS, TL).
+tableroConPosicionesLiberadas(T, [C|XS], TL) :-
+  tableroConPosiciónLiberada(T, C, TI),  
+  tableroConPosicionesLiberadas(TI, XS, TL).
 
 
 % ----------------
@@ -262,7 +252,10 @@ jugadaPosible(T, (I, J)) :-
 % jugarPosición(+TableroInicial, +Coordenada, -TableroResultante)
 % Precondición: esMatriz(TableroInicial), coordenadaEnRango(TableroInicial, Coordenada), libre(TableroInicial, Coordenada).
 
-jugarPosición(T,C,TR) :- coloresPredominantes(T,C,_,PC), tableroConPosicionesLiberadas(T,PC,TR).
+jugarPosición(T,C,TR) :- 
+  jugadaPosible(T,C), 
+  coloresPredominantes(T,C,_,PC), 
+  tableroConPosicionesLiberadas(T,PC,TR).
 
 % ----------------
 % Ejercicio 5.b)
@@ -374,7 +367,7 @@ tableroEnElQueNaiveGanaEmpezandoPor(T, Coordenada) :-
   juegoNaiveVictorioso(T1, _). 
 
 /*
-generaremos todos los pares de naturales apra luego utilizarlos en la generacion de 
+generaremos todos los pares de naturales para luego utilizarlos en la generación de 
 tableros de ese tamaño de filas y columnas. para cada tamaño que elegimos, fijamos 
 Coordenada como libre y se rellena el resto con opcionParaUnaCelda/1
 */
