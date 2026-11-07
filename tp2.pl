@@ -263,7 +263,9 @@ jugadaPosible(T, (I, J)) :-
 % jugarPosición(+TableroInicial, +Coordenada, -TableroResultante)
 % Precondición: esMatriz(TableroInicial), coordenadaEnRango(TableroInicial, Coordenada), libre(TableroInicial, Coordenada).
 
-jugarPosición(T,C,TR) :- coloresPredominantes(T,C,_,PC), tableroConPosicionesLiberadas(T,PC,TR).
+jugarPosición(T,C,TR) :- 
+  jugadaPosible(T,C), 
+  coloresPredominantes(T,C,_,PC), tableroConPosicionesLiberadas(T,PC,TR).
 
 % ----------------
 % Ejercicio 5.b)
@@ -341,9 +343,11 @@ mejorJuegoNaive(T,J) :-
 % tableroEnElQueNaiveGanaEmpezandoPor(-Tablero, +Coordenada)
 % tableroEnElQueNaiveGanaEmpezandoPor(_, _) :- completar("Ejercicio 8").
 
+% desde(+X, -Y)
 desde(X,X). 
 desde(X,Y) :- N is X+1, desde(N,Y). 
 
+% pares(-X, -Y)
 pares(X,Y) :- 
   desde(2,S), Sm1 is S-1, between(1,Sm1, X), Y is S-X. 
 
@@ -351,13 +355,15 @@ pares(X,Y) :-
 opcionParaUnaCelda(libre). 
 opcionParaUnaCelda(C) :- color(C). 
 
+%rellenarFila(+Fila)
 rellenarFila([]). 
 rellenarFila([X|XS]) :- opcionParaUnaCelda(X), rellenarFila(XS). 
 
+%rellenarTablero(+Tablero)
 rellenarTablero([]). 
 rellenarTablero([F|FS]):- rellenarFila(F), rellenarTablero(FS). 
 
-%filasDeTamañoN(+N, +ListaDeFilas).
+%filasDeTamañoN(+N, +Filas).
 filasDeTamañoN(_, []). 
 filasDeTamañoN(N, [F|FS]) :- length(F,N), filasDeTamañoN(N, FS). 
 
@@ -371,6 +377,7 @@ tableroGenerado(T, (F,C)) :-
   valorEnCoordenada(T,(F,C), libre), 
   rellenarTablero(T). 
 
+%tableroEnElQueNaiveGanaEmpezandoPor(-Tablero, +Coordenada)
 tableroEnElQueNaiveGanaEmpezandoPor(T, Coordenada) :-
   tableroGenerado(T, Coordenada), 
   jugarPosición(T, Coordenada, T1), 
@@ -380,6 +387,7 @@ tableroEnElQueNaiveGanaEmpezandoPor(T, Coordenada) :-
 generaremos todos los pares de naturales apra luego utilizarlos en la generacion de 
 tableros de ese tamaño de filas y columnas. para cada tamaño que elegimos, fijamos 
 Coordenada como libre y se rellena el resto con opcionParaUnaCelda/1
+
 */
 
 
