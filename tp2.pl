@@ -368,6 +368,7 @@ tableroGenerado(T, (F,C)) :-
 %tableroEnElQueNaiveGanaEmpezandoPor(-Tablero, +Coordenada)
 tableroEnElQueNaiveGanaEmpezandoPor(T, Coordenada) :-
   tableroGenerado(T, Coordenada), 
+  jugadaPosible(T, Coordenada),
   jugarPosición(T, Coordenada, T1), 
   juegoNaiveVictorioso(T1, _). 
 
